@@ -21,5 +21,11 @@ pipeline {
                 bat 'mvn test'
             }
         }
+
+        stage('Docker Build') {
+            steps {
+                bat 'docker build -t devops-cicd-demo:1.0 .'
+            }
+        }
     }
 }
