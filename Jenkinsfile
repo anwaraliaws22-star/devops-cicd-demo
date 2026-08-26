@@ -28,6 +28,24 @@ pipeline {
             }
         }
 
+
+stage('Docker Push') {
+    steps {
+        withCredentials([
+            usernamePassword(
+                credentialsId: 'anwaraliaws22',
+                usernameVariable: 'DOCKER_USERNAME',
+                passwordVariable: 'DOCKER_PASSWORD'
+            )
+        ]) {
+            bat '''
+                echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
+                docker tag devops-cicd-demo:1.0 %DOCKER_USERNAME%/devops-cicd-demo:1.0
+                docker push %DOCKER_USERNAME%/devops-cicd-demo:1.0
+            '''
+        }
+    }
+}
         stage('Deploy') {
             steps {
                 bat 'docker rm -f devops-cicd-demo-container 2>nul || echo No existing container'
