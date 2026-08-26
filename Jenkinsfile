@@ -38,12 +38,13 @@ pipeline {
             )
         ]) {
             bat '''
-                echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
-                if errorlevel 1 exit /b 1
+                echo Docker username: %DOCKER_USERNAME%
 
-                docker tag devops-cicd-demo:1.0 %DOCKER_USERNAME%/devops-cicd-demo:1.0
+                powershell -NoProfile -Command "$p=$env:DOCKER_PASSWORD; Write-Host ('Password received by Jenkins: ' + ($p.Length -gt 0) + ', length=' + $p.Length)"
 
-                docker push %DOCKER_USERNAME%/devops-cicd-demo:1.0
+                echo Logging into Docker Hub...
+
+                powershell -NoProfile -Command "$env:DOCKER_PASSWORD | docker login -u $env:DOCKER_USERNAME --password-stdin"
             '''
         }
     }
