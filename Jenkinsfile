@@ -32,7 +32,7 @@ pipeline {
             steps {
                 withCredentials([
                     usernamePassword(
-                       credentialsId: 'dockerhub-jenkins',
+                       credentialsId: 'anwaraliaws22',
                         usernameVariable: 'DOCKER_USERNAME',
                         passwordVariable: 'DOCKER_PASSWORD'
                     )
