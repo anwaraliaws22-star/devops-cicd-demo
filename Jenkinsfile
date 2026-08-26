@@ -39,10 +39,13 @@ stage('Docker Push') {
             )
         ]) {
             bat '''
-                echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
-                docker tag devops-cicd-demo:1.0 %DOCKER_USERNAME%/devops-cicd-demo:1.0
-                docker push %DOCKER_USERNAME%/devops-cicd-demo:1.0
-            '''
+    echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
+    if errorlevel 1 exit /b 1
+
+    docker tag devops-cicd-demo:1.0 %DOCKER_USERNAME%/devops-cicd-demo:1.0
+
+    docker push %DOCKER_USERNAME%/devops-cicd-demo:1.0
+'''
         }
     }
 }
