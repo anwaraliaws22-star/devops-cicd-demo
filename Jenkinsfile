@@ -32,18 +32,24 @@ pipeline {
     steps {
         withCredentials([
             usernamePassword(
-                credentialsId: 'dockerhub-jenkins',
+                credentialsId: 'anwaraliaws22',
                 usernameVariable: 'DOCKER_USERNAME',
                 passwordVariable: 'DOCKER_PASSWORD'
             )
         ]) {
             bat '''
-                echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
+                echo Logging into Docker Hub...
+                powershell -NoProfile -Command "$env:DOCKER_PASSWORD | docker login -u $env:DOCKER_USERNAME --password-stdin"
+
                 if errorlevel 1 exit /b 1
 
+                echo Tagging Docker image...
                 docker tag devops-cicd-demo:1.0 %DOCKER_USERNAME%/devops-cicd-demo:1.0
 
+                echo Pushing Docker image...
                 docker push %DOCKER_USERNAME%/devops-cicd-demo:1.0
+
+                if errorlevel 1 exit /b 1
             '''
         }
     }
