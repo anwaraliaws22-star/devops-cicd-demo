@@ -29,41 +29,34 @@ pipeline {
         }
 
         stage('Docker Push') {
-    steps {
-        withCredentials([
-            usernamePassword(
-                credentialsId: 'dockerhub-creds',
-                usernameVariable: 'DOCKER_USERNAME',
-                passwordVariable: 'DOCKER_PASSWORD'
-            )
-        ]) {
-            bat '''
-<<<<<<< HEAD
-                echo Logging into Docker Hub...
-                powershell -NoProfile -Command "$env:DOCKER_PASSWORD | docker login -u $env:DOCKER_USERNAME --password-stdin"
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'DOCKER_USERNAME',
+                        passwordVariable: 'DOCKER_PASSWORD'
+                    )
+                ]) {
+                    bat '''
+                        echo Logging into Docker Hub...
 
-                if errorlevel 1 exit /b 1
+                        powershell -NoProfile -Command "$env:DOCKER_PASSWORD | docker login -u $env:DOCKER_USERNAME --password-stdin"
 
-                echo Tagging Docker image...
-                docker tag devops-cicd-demo:1.0 %DOCKER_USERNAME%/devops-cicd-demo:1.0
+                        if errorlevel 1 exit /b 1
 
-                echo Pushing Docker image...
-                docker push %DOCKER_USERNAME%/devops-cicd-demo:1.0
+                        echo Tagging Docker image...
 
-                if errorlevel 1 exit /b 1
-=======
-                echo Docker username: %DOCKER_USERNAME%
+                        docker tag devops-cicd-demo:1.0 %DOCKER_USERNAME%/devops-cicd-demo:1.0
 
-                powershell -NoProfile -Command "$p=$env:DOCKER_PASSWORD; Write-Host ('Password received by Jenkins: ' + ($p.Length -gt 0) + ', length=' + $p.Length)"
+                        echo Pushing Docker image...
 
-                echo Logging into Docker Hub...
+                        docker push %DOCKER_USERNAME%/devops-cicd-demo:1.0
 
-                powershell -NoProfile -Command "$env:DOCKER_PASSWORD | docker login -u $env:DOCKER_USERNAME --password-stdin"
->>>>>>> 4b8364d68d53ae0520c177fcdf376e79b7b91465
-            '''
+                        if errorlevel 1 exit /b 1
+                    '''
+                }
+            }
         }
-    }
-}
 
         stage('Deploy') {
             steps {
