@@ -16,7 +16,7 @@ public class HelloController {
     public Map<String, String> hello() {
 
         return Map.of(
-                "message", "Hello from DevOps CI/CD Pipeline v6",
+                "message", "Hello from DevOps CI/CD Pipeline v7",
                 "version", version
         );
     }
